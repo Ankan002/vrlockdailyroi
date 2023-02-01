@@ -19,15 +19,15 @@ function Overview() {
 
 
   
-  if (typeof window !== "undefined") {
+//   if (typeof window !== "undefined") {
     
 
-    if (sessionStorage.getItem("jwt")) {
-      router.push("/purchasePack")
-    }
+//     if (sessionStorage.getItem("jwt")) {
+//       router.push("/purchasePack")
+//     }
 
 
-}
+// }
 
 
 

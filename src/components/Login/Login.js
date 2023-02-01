@@ -19,57 +19,97 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userWalletId, setUserWalletId] = useState("")
+  const [connectedToMetamask, setConnectedToMetamask] = useState(false)
+  const [accountCreated, setAccountCreated] = useState(false)
   const router = useRouter()
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
   
-    if(window.ethereum){
+  //   if(window.ethereum){
   
-      window.ethereum.request({method:'eth_requestAccounts'})
-      .then(res=>{
-              // Return the address of the wallet
-            console.log(res[0])
-            setUserWalletId(res[0])
-            try {
-              axios
-                .post('/api/authentication/login', {
-                  wallAddress:res[0],
-                  upperline:email
-                })
-                .then((acc) => {
-                  console.log(acc.data)
-                  console.log(acc.data.UpperLineSponserUser.length);
-                  if (acc.data.UpperLineSponserUser.length > 0) {
+  //     window.ethereum.request({method:'eth_requestAccounts'})
+  //     .then(res=>{
+  //             // Return the address of the wallet
+  //           console.log(res[0])
+  //           setUserWalletId(res[0])
+  //           try {
+  //             axios
+  //               .post('/api/authentication/login', {
+  //                 wallAddress:res[0],
+  //                 upperline:email
+  //               })
+  //               .then((acc) => {
+  //                 console.log(acc.data)
+  //                 console.log(acc.data.UpperLineSponserUser.length);
+  //                 if (acc.data.UpperLineSponserUser.length > 0) {
                     
-                              // sessionStorage.setItem("jwt", JSON.stringify(acc.data))
-                              router.push("/dash")
+  //                             // sessionStorage.setItem("jwt", JSON.stringify(acc.data))
+  //                             router.push("/dash")
                     
-                  }
+  //                 }
         
         
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setIsLoading(false);
-                });
-            } catch (error) {
-              console.log(error);
-            }
+  //               })
+  //               .catch((err) => {
+  //                 console.log(err);
+  //                 setIsLoading(false);
+  //               });
+  //           } catch (error) {
+  //             console.log(error);
+  //           }
          
            
-      })
-    }else{
-      alert("install metamask extension!!")
-    }
+  //     })
+  //   }else{
+  //     alert("install metamask extension!!")
+  //   }
 
 
-  }, [])
+  // }, [])
 
 
 
   const handleLogin = () => {
+    setIsLoading(true);
+
+    try {
+      axios
+        .post('/api/authentication/login', {
+          wallAddress:userWalletId,
+          upperline:email
+        })
+        .then((acc) => {
+          // setConnectedToMetamask(false)
+          console.log(acc.data);
+          setIsLoading(false)
+
+          if (acc.data.goToAddWallet) {
+            setAccountCreated(true)
+            
+          }else{
+            
+          sessionStorage.setItem("jwt", JSON.stringify(acc.data.datam))
+          router.push("/dash")
+
+          }
+
+
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+
+  const handleUpdateWallet = () => {
     setIsLoading(true);
 
     try {
@@ -79,17 +119,14 @@ const Login = () => {
           upperline:email
         })
         .then((acc) => {
+          // setConnectedToMetamask(false)
           console.log(acc.data);
           setIsLoading(false)
+          setAccountCreated(true)
 
-          router.reload()
+          sessionStorage.setItem("jwt", JSON.stringify(acc.data))
+          router.push("/dash")
 
-          if (acc.data.UpperLineSponserUser.length > 0) {
-            
-                      sessionStorage.setItem("jwt", JSON.stringify(acc.data))
-                      router.push("/dash")
-            
-          }
 
 
         })
@@ -141,7 +178,9 @@ const Login = () => {
       window.ethereum.request({method:'eth_requestAccounts'})
       .then(res=>{
               // Return the address of the wallet
+              setConnectedToMetamask(true)
               console.log(res) 
+              setUserWalletId(res[0])
       })
 
 
@@ -159,7 +198,7 @@ const Login = () => {
   return (
     <Card style={{ backgroundImage: `url("http://www.vrblocksyield.com/assets/img/banner_bg.png")`, width: "100%", backgroundSize: "cover", height: "100%" }}>
       <div style={{ marginRight: 20 }}>
-        <div className="row mt-5">
+        {/* <div className="row mt-5">
           <div className="col-sm-6" >
 
           </div>
@@ -179,7 +218,7 @@ const Login = () => {
             </div>
 
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div
@@ -223,7 +262,7 @@ const Login = () => {
               fullWidth
             /> */}
 
-            <TextField
+            {/* <TextField
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -231,9 +270,9 @@ const Login = () => {
               label="Upperline"
               type="Upperline"
               fullWidth
-            />
+            /> */}
             <div style={{ marginTop: 20, textAlign: 'center' }}>
-              {
+              {/* {
             isLoading ? 
             <Button
                
@@ -260,7 +299,44 @@ const Login = () => {
 
 
 
+          } */}
+
+          {
+            !connectedToMetamask &&
+          <button onClick={connectWallet} className='btn btn-warning' style={{fontWeight:"bolder"}}>CONNECT METAMASK</button>
+        }
+
+
+          {
+            connectedToMetamask && !accountCreated&&
+            <>
+            <button className='btn btn-warning' style={{fontWeight:"bolder"}}>{userWalletId.slice(0,15)}...</button> <br/>
+            <button onClick={handleLogin} className='btn  mt-2' style={{fontWeight:"bolder",borderColor:"#FFC61D",borderWidth:2,borderStyle:"solid",color:"white"}}>REGISTER / LOGIN</button>
+            </>
           }
+
+
+          {
+            accountCreated &&
+            <>
+            
+            <TextField
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              style={{ marginTop: 20 }}
+              label="Upline Wallet Address"
+              type="Upline Wallet Address"
+              fullWidth
+            /> <br/>
+            <button onClick={handleUpdateWallet} className='btn  mt-4' style={{fontWeight:"bolder",borderColor:"#FFC61D",borderWidth:2,borderStyle:"solid",color:"white"}}>UPDATE WALLET</button>
+
+
+            </>
+          }
+
+
+          
 
 
 

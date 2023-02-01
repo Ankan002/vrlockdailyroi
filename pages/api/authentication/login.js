@@ -29,8 +29,10 @@ export default async (req, res) => {
       UpperLineSponserUser: upperline
     }).save()
 
-    return res.json(createUser)
+    return res.json({datam:createUser,goToAddWallet:true})
 
-  } 
+  }else{
+    return res.json({datam:findUser,goToAddWallet:false})
+  }
 
 };
