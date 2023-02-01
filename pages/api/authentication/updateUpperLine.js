@@ -4,7 +4,6 @@ import DailyRoi from "../../../helper/Modal/DailyRoi"
 import LevelDailyRoi from "../../../helper/Modal/LevelDailyRoi"
 import PackageIHistory from "../../../helper/Modal/PackageIHistory"
 
-
 initDB();
 
 export default async (req, res) => {
@@ -18,19 +17,12 @@ export default async (req, res) => {
       .json({ error: "You Have Not Provided All The Informations" });
   }
 
-  const findUser = await User.findOne({ WalletAddress: wallAddress })
+    const findUser = await User.findOne({ WalletAddress: wallAddress })
+    
+    const updateItNow = await User.findByIdAndUpdate({ _id: findUser._id }, { UpperLineSponserUser: upperline })
 
-  console.log(findUser)
 
-  if (findUser == null) {
+    res.json(updateItNow)
 
-    const createUser = await User({
-      WalletAddress: wallAddress,
-      UpperLineSponserUser: upperline
-    }).save()
+  }
 
-    return res.json(createUser)
-
-  } 
-
-};

@@ -43,7 +43,7 @@ const Login = () => {
                   console.log(acc.data.UpperLineSponserUser.length);
                   if (acc.data.UpperLineSponserUser.length > 0) {
                     
-                              sessionStorage.setItem("jwt", JSON.stringify(acc.data))
+                              // sessionStorage.setItem("jwt", JSON.stringify(acc.data))
                               router.push("/dash")
                     
                   }
@@ -74,7 +74,7 @@ const Login = () => {
 
     try {
       axios
-        .post('/api/authentication/login', {
+        .post('/api/authentication/updateUpperLine', {
           wallAddress:userWalletId,
           upperline:email
         })
