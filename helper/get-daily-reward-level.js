@@ -1,4 +1,5 @@
 const level = {
+  InEligible: 'Not Eligible',
   Junior: '$0.5',
   Pro: 'Domestic Tour',
   Starter: 'Laptop',
@@ -55,5 +56,10 @@ export const getDailyRewardLevel = (amount) => {
     return {
       level: 'President',
       reward: level.President
+    };
+  else
+    return {
+      level: 'Ineligible',
+      reward: level.InEligible
     };
 };
