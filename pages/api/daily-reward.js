@@ -22,7 +22,7 @@ const dailyReward = async (req, res) => {
       .sort('-createdAt')
       .limit(1);
 
-    if (lastReward.length > 0) {
+    if (rewards.length > 0) {
       const lastRewardTimeString = rewards[0].time_granted;
       const lastRewardTime = parse(
         lastRewardTimeString,

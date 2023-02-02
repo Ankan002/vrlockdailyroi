@@ -7,7 +7,7 @@ const level = {
   Expert: '$200',
   Senate: '$300',
   Director: '$500',
-  President: '$100'
+  President: '$1000'
 };
 
 export const getDailyRewardLevel = (amount) => {
